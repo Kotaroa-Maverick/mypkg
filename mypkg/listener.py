@@ -1,16 +1,27 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
+from std_msgs.msg import Float64
 
 
-rclpy.init()
-node = Node("listener")
+class CpuListener(Node):
+    def __init__(self):
+        super().__init__('cpu_listener')
+        self.sub = self.create_subscription(Float64, "cpu_usage", self.cb, 10)
 
-
-def cb(msg):
-    global node
-    node.get_logger().info("Listen: %d" % msg.data)
+    def cb(self, msg):
+        
+        status = "NORMAL"
+        if msg.data > 80.0:
+            status = "HIGH LOAD!"
+        
+        self.get_logger().info('CPU Usage: %.1f%% [%s]' % (msg.data, status))
 
 def main():
-    pub = node.create_subscript(Int16, "countup", cb 10)
+    rclpy.init()
+    node = CpuListener()
     rclpy.spin(node)
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+

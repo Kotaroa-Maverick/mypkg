@@ -9,11 +9,9 @@ class CpuListener(Node):
         self.sub = self.create_subscription(Float64, "cpu_usage", self.cb, 10)
 
     def cb(self, msg):
-        
         status = "NORMAL"
         if msg.data > 80.0:
             status = "HIGH LOAD!"
-        
         self.get_logger().info('CPU Usage: %.1f%% [%s]' % (msg.data, status))
 
 def main():

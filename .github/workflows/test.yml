@@ -24,3 +24,4 @@ jobs:
           colcon build --packages-select mypkg
           colcon test --packages-select mypkg --pytest-args -k "not flake8 and not copyright and not pep257" || true
           colcon test-result
+          bash test/test.bash $(pwd)

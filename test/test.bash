@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2026 Kota Iwasaki
 # SPDX-License-Identifier: BSD-3-Clause
 
 dir=~

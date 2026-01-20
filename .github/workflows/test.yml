@@ -1,27 +1,13 @@
 name: test
 on: push
-
 jobs:
   test:
     runs-on: ubuntu-22.04
+    container: ryuichueda/ubuntu22.04-ros2:latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@v0.7
-        with:
-          required-ros-distributions: humble
-
-      - name: Install dependencies
+      - uses: actions/checkout@v2
+      - name: build and test
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-psutil
-
-      - name: Build and Test
-        run: |
-          source /opt/ros/humble/setup.bash
-          colcon build --packages-select mypkg
-          colcon test --packages-select mypkg --pytest-args -k "not flake8 and not copyright and not pep257" || true
-          colcon test-result
-          bash test/test.bash $(pwd)
+          rsync -av ./ /root/ros2_ws/src/mypkg/
+          cd /root/ros2_ws
+          bash -xv ./src/mypkg/test/test.bash /root
